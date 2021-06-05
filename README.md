@@ -4,6 +4,7 @@ This program is my implementation of the Huffman Coding algorithm for text file 
 You are free to use it for your projects, but it`s going to be great to leave a link to this repo as in your references.
 
 Project structure:
+
     Folder "bin" - a pre-build project with ready-to-test files ("new" 
     and "huge") and *.ini files for testing.
 
