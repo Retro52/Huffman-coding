@@ -8,6 +8,7 @@ Project structure:
     and "huge") and *.ini files for testing.
 
     Folder "code" - program source code:
+    
         Folder "cla" - part of the program responsible for command- 
     	line arguments
     
