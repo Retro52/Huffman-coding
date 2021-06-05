@@ -19,7 +19,7 @@ Project structure:
     	Folder "test" - for running unit, functional, and load testing to 
     	program.
 
-#Instructions
+# Instructions
 
 Use argument:
 --help for instructions
