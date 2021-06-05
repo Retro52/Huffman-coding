@@ -19,4 +19,12 @@ Project structure:
     	Folder "test" - for running unit, functional, and load testing to 
     	program.
 
+#Instructions
+
+Use argument:
+--help for instructions
+--test for running tests
+--compare to start comparision
+-c *filename* to compress file "filename"
+-d *filename.huf* to decompress file "filename.huf"
 
