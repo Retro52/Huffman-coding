@@ -25,6 +25,8 @@ Project structure:
     	
         Folder "test" - for running unit, functional, and load testing to 
     	program.
+        
+        Folder "additional" - for different stuff and additional functions
 
 # Instruction
 
@@ -38,4 +40,5 @@ Use argument:
 -c *filename* to compress file *filename*;
 
 -d *filename.huf* to decompress file *filename.huf*;
+output=*filename* to set output file name
 
