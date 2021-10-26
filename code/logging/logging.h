@@ -33,27 +33,27 @@ void LOG(int level, const char *file, const char *message, ...);
 /***
  * @result: Function for logging info data
  * */
-void log_info(const char *file, const char *message, ...);
+void log_info(const char *file, const char *message, va_list args);
 
 /***
  * @result: Function for logging debug data
  * */
-void log_debug(const char *file, const char *message, ...);
+void log_debug(const char *file, const char *message, va_list args);
 
 /***
  * @result: Function for logging warn data
  * */
-void log_warn(const char *file, const char *message, ...);
+void log_warn(const char *file, const char *message, va_list args);
 
 /***
  * @result: Function for logging errors data
  * */
-void log_error(const char *file, const char *message, ...);
+void log_error(const char *file, const char *message, va_list args);
 
 /***
  * @result: Function for logging fatal errors data
  * */
-void log_fatal(const char *file, const char *message, ...);
+void log_fatal(const char *file, const char *message, va_list args);
 
 /***
  * @result: Function for writing given log message to the log file

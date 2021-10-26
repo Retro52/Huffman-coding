@@ -44,9 +44,10 @@ int main(const int argc, const char **argv)
 {
     /* checking what command line arguments were given */
     int a = handler(argc, argv);
-    LOG(LOGLEVEL_DEBUG, LF_MAIN, "Program is loaded and ready to work!");
 
-    LOG(LOGLEVEL_DEBUG, LF_MAIN, "Command line arguments given: %d", argc);
+    int logargs = argc;
+    LOG(LOGLEVEL_DEBUG, LF_MAIN, "Program is loaded and ready to work!");
+    LOG(LOGLEVEL_DEBUG, LF_MAIN, "Command line arguments given: %d", logargs);
 
 
     /* Comparison option */
@@ -74,6 +75,8 @@ int main(const int argc, const char **argv)
         exit(0);
     }
 
+    char inputCompress[50], outputCompress[50], inputDecompress[50], outputDecompress[50];
+
     while (1)
     {
         int menu = input_int("\nWelcome!\n"
@@ -83,22 +86,40 @@ int main(const int argc, const char **argv)
         switch (menu)
         {
             case 1:
+                LOG(LOGLEVEL_DEBUG, "main.c", "Executing compression subtask");
+
                 printf("Enter file name to compress: \n");
-                LOG(LOGLEVEL_DEBUG, "main.c", "First task");
-                char f1[50];
-                fgets(f1, 50, stdin);
-                edit_str(f1);
-                LOG(LOGLEVEL_DEBUG, "main.c", "File name for first task is: %s", f1);
-                compress(f1);
+                fgets(inputCompress, 50, stdin);
+                LOG(LOGLEVEL_DEBUG, "main.c", "Input file name for first task is: %s", inputCompress);
+
+
+                printf("Set output file name: \n");
+                fgets(outputCompress, 50, stdin);
+                LOG(LOGLEVEL_DEBUG, "main.c", "Output file name for first task is: %s", outputCompress);
+
+                edit_str(inputCompress);
+                edit_str(outputCompress);
+
+                compress(inputCompress, outputCompress);
                 break;
+
             case 2:
+                LOG(LOGLEVEL_DEBUG, "main.c", "Executing decompression subtask");
+
                 printf("Enter file name to decompress: \n");
-                LOG(LOGLEVEL_DEBUG, LF_MAIN, "Second task launched task");
-                char f2[50];
-                fgets(f2, 50, stdin);
-                edit_str(f2);
-                decompress(f2);
+                fgets(inputDecompress, 50, stdin);
+                LOG(LOGLEVEL_DEBUG, "main.c", "Input file name for second task is: %s", inputDecompress);
+
+                printf("Set output file name: \n");
+                fgets(outputDecompress, 50, stdin);
+                LOG(LOGLEVEL_DEBUG, "main.c", "Output file name for second task is: %s", outputDecompress);
+
+                edit_str(inputDecompress);
+                edit_str(outputDecompress);
+
+                decompress(inputDecompress, outputDecompress);
                 break;
+
             case 3:
                 LOG(LOGLEVEL_INFO, "main.c", "Program finished");
                 exit(0);

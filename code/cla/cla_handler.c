@@ -9,11 +9,12 @@
 #include "cla_handler.h"
 #include "../logging/iniparser.h"
 #include "../tasks/compression.h"
+#include "../additional/customString.h"
 
 int handler(const int argc, const char **argv)
 {
     /* Checks if any args were given */
-    if (argc > 1)
+    if (argc == 2)
     {
         /* Comparison launched */
         if (!strcmp(argv[1], "--compare"))
@@ -129,44 +130,33 @@ char *files_init(const int argument, const int argc, const char **argv)
         /* First file is a path to the logs file */
         names[0] = init_logpath();
 
-        switch (argc)
+        if (argc > 2)
         {
-            /* One argument detected, but he didn't match --help */
-            case 2:
-                printf("[WARNING] Wrong command line arguments.\n"
-                       "Consider using 'program.exe --help' for additional info");
-                names[1] = NULL;
-                break;
-
-            case 3:
-
-                /* Checks if there are valid arguments */
-                if (!strcmp((char *) argv[1], "-c"))
+            char output[50];
+            output[0] = '\000';
+            int i;
+            for (i = 1; i < argc; i++)
+            {
+                if (startsWith(argv[i], "output=", (int) strlen(argv[i]), (int) strlen("output=")))
                 {
-                    /* Compress argument matches */
-                    compress(argv[2]);
-                    exit(0);
+                    int j;
+                    for (j = 7; j < strlen(argv[i]); ++j)
+                    {
+                        output[j - 7] = argv[i][j];
+                    }
                 }
-                else if (!strcmp((char *) argv[1], "-d"))
+            }
+            for (i = 1; i < argc; i++)
+            {
+                if (!strcmp(argv[i], "-c"))
                 {
-                    /* Decompress argument matches */
-                    decompress(argv[2]);
-                    exit(0);
+                    compress(argv[i + 1], output);
                 }
-                else
+                if (!strcmp(argv[i], "-d"))
                 {
-                    /* Three cla given but none of them is valid */
-                    printf("[WARNING] Wrong command line arguments.\n"
-                           "Consider using 'program.exe --help' for additional info");
-                    names[1] = NULL;
+                    decompress(argv[i + 1], output);
                 }
-                break;
-
-            default:
-                /* For case with no command line arguments or when there is more than 4 of them */
-                printf("[INFO] No valuable command line arguments given\n");
-                names[1] = NULL;
-                break;
+            }
         }
 
         /* Marking files as initialized */

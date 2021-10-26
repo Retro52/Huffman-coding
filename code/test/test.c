@@ -59,12 +59,12 @@ void test_parser()
 
 void test_compression()
 {
-    compress("new");
+    compress("new", NULL);
 }
 
 void test_decompression()
 {
-    decompress("new.huf");
+    decompress("new.huf", NULL);
 }
 
 void test_functionality()
@@ -105,12 +105,12 @@ void test_functionality()
 
 void test_compression_huge()
 {
-    compress("huge");
+    compress("huge", NULL);
 }
 
 void test_decompression_huge()
 {
-    decompress("huge.huf");
+    decompress("huge.huf", NULL);
 }
 
 void test_functionality_huge()

@@ -127,7 +127,7 @@ void encode(FILE *infile, FILE *outfile, char **codes);
  * @param input: name of file to compress_compare
  * @result: Compresses file with given name
  */
-void compress(const char *input);
+void compress(const char *input, char *fname);
 
 /***
  * @param input: File to read coded data from
@@ -141,6 +141,6 @@ void decode(FILE *input, FILE *output, const treenode *r, int n);
  * @param input: file to read input data from
  * @result: decodes text from given file
  */
-void decompress(const char *input);
+void decompress(const char *input, char *fname);
 
 #endif //HUFFMAN_CODING_COMPRESSION_H
