@@ -40,5 +40,6 @@ Use argument:
 -c *filename* to compress file *filename*;
 
 -d *filename.huf* to decompress file *filename.huf*;
-output=*filename* to set output file name
+
+output=*filename* to set output file name;
 
