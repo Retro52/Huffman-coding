@@ -5,8 +5,6 @@
 #include "logging.h"
 #include "iniparser.h"
 
-#define LF_LGG "logging.c"
-
 int init()
 {
     static void *a;
@@ -26,7 +24,7 @@ int init()
             b = (int) **(double **) &a;
             if (b == 0)
             {
-                log_debug(LF_LGG, "Loglevel value is initialized and set to %d\n", b);
+                printf("Loglevel value is initialized and set to %d\n", b);
             }
 
             /* Marking value as initialized */
@@ -40,10 +38,8 @@ int init()
             {
                 if (b == -1)
                 {
-                    log_warn(LF_LGG,
-                             "Ini reading error - a parameter is too low or too high.\n"
-                             "Check your %s file and retry again\n", INI_FILE);
-                    log_debug(LF_LGG, "Loglevel set to default (0, debug level) due to error");
+                    printf("[WARNING] Ini reading error - a parameter is too low or too high.\n"
+                           "Check your %s file and retry again\n", INI_FILE);
                 }
                 b = 0;
                 initialized = true;
@@ -53,8 +49,8 @@ int init()
         /* In case if string was written by address */
         if (status == 2)
         {
-            log_warn(LF_LGG, "Unexpected argument while reading loglevel value\n"
-                     "Check %s file", INI_FILE);
+            printf("[WARNING] Unexpected argument while reading loglevel value\n"
+                   "Check your %s file and retry again\n", INI_FILE);
             initialized = true;
             b = 0;
         }
@@ -62,7 +58,7 @@ int init()
         /* In case if .ini reading error was returned */
         if (status != 1 && status != 2)
         {
-            log_error(LF_LGG, "Failed to read %s file, Loglevel set to debug (0)\n", INI_FILE);
+            printf("[WARNING] Failed to read %s file, Loglevel set to debug (0)", INI_FILE);
             initialized = true;
             b = 0;
         }
@@ -135,7 +131,7 @@ void log_format(const char *file, const char *tag, const char *message, const va
         /*
          * sprintf function returns number of characters written to array (in this case log_info[80]),
          * so we can use this value as an analog of strlen(). Len is needed to add '\0' at the correct place, so
-         * log info will be written as string value correctly and (I hope so) without any errors
+         * log info will be written as string value correctly and without any errors
          */
 
         int len = sprintf(log_info, "%s [%s] [%s] ", date, file, tag);
@@ -155,42 +151,27 @@ void log_format(const char *file, const char *tag, const char *message, const va
     }
 }
 
-void log_info(const char *file, const char *message, ...)
+void log_info(const char *file, const char *message, const va_list args)
 {
-    va_list args;
-    va_start(args, message);
     log_format(file, "info", message, args);
-    va_end(args);
 }
 
-void log_debug(const char *file, const char *message, ...)
+void log_debug(const char *file, const char *message, const va_list args)
 {
-    va_list args;
-    va_start(args, message);
     log_format(file, "debug", message, args);
-    va_end(args);
 }
 
-void log_warn(const char *file, const char *message, ...)
+void log_warn(const char *file, const char *message, const va_list args)
 {
-    va_list args;
-    va_start(args, message);
     log_format(file, "warning", message, args);
-    va_end(args);
 }
 
-void log_error(const char *file, const char *message, ...)
+void log_error(const char *file, const char *message, const va_list args)
 {
-    va_list args;
-    va_start(args, message);
     log_format(file, "error", message, args);
-    va_end(args);
 }
 
-void log_fatal(const char *file, const char *message, ...)
+void log_fatal(const char *file, const char *message, const va_list args)
 {
-    va_list args;
-    va_start(args, message);
     log_format(file, "fatal", message, args);
-    va_end(args);
 }

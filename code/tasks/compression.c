@@ -288,12 +288,12 @@ void encode(FILE *infile, FILE *outfile, char **codes)
     }
 }
 
-void compress(const char *input)
+void compress(const char *input, char *fname)
 {
     FILE *f, *g;
     treenode *r;
     unsigned int n, freqs[NUM_CHARS];
-    char *codes[NUM_CHARS], code[NUM_CHARS], fname[100];
+    char *codes[NUM_CHARS], code[NUM_CHARS];
 
     /* set all frequencies to zero */
     memset(freqs, 0, sizeof(freqs));
@@ -318,8 +318,14 @@ void compress(const char *input)
     /* traverse the tree, filling codes[] with the codes */
     traverse(r, 0, code, codes);
 
-    /* name the output file something.huf */
-    sprintf(fname, "%s.huf", input);
+
+    /* Check if output file name was set */
+    if (!fname || fname[0] == '\000')
+    {
+        /* name of the output file will be something.huf */
+        sprintf(fname, "%s.huf", input);
+    }
+
     g = fopen(fname, "wb");
     if (!g)
     {
@@ -345,13 +351,15 @@ void compress(const char *input)
 
     /* encode f to g with codes[] */
     encode(f, g, codes);
-    fclose(f);
-    fclose(g);
 
     /* brag */
     LOG(LOGLEVEL_INFO, LF_COMPR, "File compressed successfully\n");
     printf("File compressed successfully and %s is %0.2f%% of %s\n",
            fname, ((float) nbytes / (float) n) * 100.0, input);
+
+    /* Close streams */
+    fclose(f);
+    fclose(g);
 }
 
 void decode(FILE *input, FILE *output, const treenode *r, int n)
@@ -404,26 +412,14 @@ void decode(FILE *input, FILE *output, const treenode *r, int n)
     }
 }
 
-void decompress(const char *input)
+void decompress(const char *input, char *fname)
 {
     FILE *f, *g;
     treenode *r;
     unsigned int n, freqs[NUM_CHARS];
-    char fname[100];
 
     /* set all frequencies to zero */
     memset(freqs, 0, sizeof(freqs));
-
-    int len = (int) strlen(input);
-
-    /* Checking if file extension is correct */
-    if (input[len - 4] != '.' || input[len - 3] != 'h' || input[len - 2] != 'u' || input[len - 1] != 'f')
-    {
-        fputs(input, stderr);
-        fputs(": wrong file format", stderr);
-        LOG(LOGLEVEL_ERROR, LF_COMPR, "Input file has wrong encoding\n");
-        return;
-    }
 
     f = fopen(input, "rb");
     if (!f)
@@ -433,10 +429,14 @@ void decompress(const char *input)
         return;
     }
 
+    if (!fname || fname[0] == '\000')
+    {
+        /* name of the output file will be something.huf */
+        sprintf(fname, "%s", input);
+        fname[(int) strlen(input) - 4] = '\0';
+        sprintf(fname, "%s.txt", fname);
+    }
 
-    sprintf(fname, "%s", input);
-    fname[(int) strlen(input) - 4] = '\0';
-    sprintf(fname, "%s.txt", fname);
     g = fopen(fname, "w");
 
     if (!g)
@@ -456,11 +456,10 @@ void decompress(const char *input)
     /* name the output file something.huf */
     decode(f, g, r, (int) n);
 
-    /* brag */
+    /* Close streams */
     fclose(f);
     fclose(g);
 
     LOG(LOGLEVEL_INFO, LF_COMPR, "File compressed successfully\n");
-
     printf("\nFile decompressed successfully!\n");
 }
